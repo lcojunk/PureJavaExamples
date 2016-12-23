@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp">
+<head></head>
+<body ng-controller="PhoneListCtrl">
+	
+  	<table>
+	  <tr><th>row number</th><th>row description</th></tr>
+	  <tr><td>1</td><td>Bla Bla Bla</td></tr>
+	  <tr><td>2</td><td>Bla Bla Bla</td></tr>
+	</table>
+
+  
+  
+</body>
+</html>
