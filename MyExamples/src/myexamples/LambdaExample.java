@@ -34,7 +34,7 @@ public class LambdaExample {
     private static String[] names = {"Klaus", "Klara", "John", "James", "Kurt", "Jane"};
 
     public static void main(String[] args) {
-        testJavaSet();
+        testToMap();
 //        findByIdUsage();
 //        example1();
 //        example2();
