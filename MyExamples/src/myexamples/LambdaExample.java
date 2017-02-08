@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import myexamples.lambda.DummyArticle;
@@ -34,13 +35,40 @@ public class LambdaExample {
     private static String[] names = {"Klaus", "Klara", "John", "James", "Kurt", "Jane"};
 
     public static void main(String[] args) {
-        testToMap();
+
+//        exceptionExample();
+//        testToMap();
 //        findByIdUsage();
 //        example1();
 //        example2();
 //        exampleParallelExecCompare();
 //        example3();
+    }
 
+    private static void exceptionExample() {
+        catchException(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("hello world");
+            }
+        });
+        catchException(() -> {
+            System.out.println("hello world");
+        });
+        catchException(() -> {
+            System.out.println("hello world" + (10 / 0));
+        });
+
+    }
+
+    private static void catchException(Runnable r) {
+        System.out.println("*********************************");
+        try {
+            r.run();
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        System.out.println("*********************************");
     }
 
     private static void testExistsString() {
@@ -107,6 +135,14 @@ public class LambdaExample {
 
     }
 
+    private static void testFindTweetByName() {
+        List<TweetEntity> tweets = new ArrayList<>();
+        tweets.add(new TweetEntity(null, "name1", "tweet1"));
+        tweets.add(new TweetEntity(null, "name2", "tweet2"));
+        tweets.add(new TweetEntity(null, "name3", "tweet3"));
+
+    }
+
     private static void testNewList() {
         List<TweetEntity> tweets = new ArrayList<>();
         tweets.add(new TweetEntity(null, "name1", "tweet1"));
@@ -124,6 +160,13 @@ public class LambdaExample {
 
     private static boolean existsString(List<String> ll, String refId) {
         return ll.stream().filter(id -> id.equals(refId)).findFirst().isPresent();
+    }
+
+    private static TweetEntity findByName(String name, List<TweetEntity> tList) {
+        return tList.stream()
+                .filter(tweet -> (tweet != null && tweet.getName() != null))
+                .filter(tweet -> tweet.getName().equals(name))
+                .findAny().orElse(null);
     }
 
     private static void assertPrint(String message, boolean b) {

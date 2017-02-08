@@ -5,6 +5,10 @@
  */
 package myexamples;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  *
  * @author odzhara-ongom
@@ -12,11 +16,51 @@ package myexamples;
 public class ExceptionExample {
 
     public static void main(String[] args) {
-//        try {
-//            testException(null);
-//        } catch (CustomException e) {
-//            e.printStackTrace();
-//        }
+        testThrowingnUncheckedException();
+
+    }
+
+    private static boolean throwCheckedException(boolean shouldThrow) throws IOException {
+        if (shouldThrow) {
+            throw new IOException(); //is checked exception
+        }
+        return shouldThrow;
+    }
+
+    private static boolean throwUncheckedException(boolean shouldThrow) {
+        try {
+            return throwCheckedException(shouldThrow);
+        } catch (IOException e) {
+            System.out.println("Checked exception is caught");
+            throw new IllegalArgumentException("illegal argument in throwCheckedException", e);
+        }
+    }
+
+    private static Connection getConnection() {
+        return null;
+    }
+
+    private static void testThrowingCheckedException() throws SQLException {
+        try (Connection connection = getConnection()) {
+
+        }
+        try {
+            System.out.println("no exception:" + throwCheckedException(false));
+            throwCheckedException(true);
+        } catch (IOException e) {
+            System.out.println("Exception is thrown");
+        }
+    }
+
+    private static void testThrowingnUncheckedException() {
+        try {
+            System.out.println("unchecked exception:" + throwUncheckedException(true));
+        } catch (IllegalArgumentException exception) {
+            System.out.println("Unchecked Exception was caught:" + exception.getMessage());
+        }
+    }
+
+    private static void testCustomException() {
         try {
             double a = testDivByNullException(5.0, 0.0);
             System.out.println("a=" + a);

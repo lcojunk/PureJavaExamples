@@ -85,6 +85,8 @@ public class TestChar {
     }
 
     public static void main(String[] args) {
+        System.out.println("hEL*0o".toLowerCase());
+        String[] splitted = "one and two or three and for".split("and");
         long dateLong = 1422745200000L;
         Date date = new Date(dateLong);
         System.out.println("date=" + date.toString());

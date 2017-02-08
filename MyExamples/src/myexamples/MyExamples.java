@@ -6,12 +6,15 @@
 package myexamples;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import myexamples.Entities.RefEntity;
+import myexamples.sorting.SortingExample;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -27,9 +30,11 @@ import org.apache.http.util.EntityUtils;
  * @author odzhara-ongom
  */
 public class MyExamples {
-    public static CloseableHttpClient httpclient ;
-    public static Gson gson=new Gson();
-    public static void getExample() throws IOException{
+
+    public static CloseableHttpClient httpclient;
+    public static Gson gson = new Gson();
+
+    public static void getExample() throws IOException {
         HttpGet httpGet = new HttpGet("http://localhost:9200/gb/tweet/9");
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
         // The underlying HTTP connection is still held by the response object
@@ -49,18 +54,18 @@ public class MyExamples {
                 if (len != -1 && len < 2048) {
                     System.out.println(EntityUtils.toString(entity1));
                 } else {
-                    System.out.println("entity length="+len);
+                    System.out.println("entity length=" + len);
                 }
             }
-            
+
             EntityUtils.consume(entity1);
         } finally {
             response1.close();
         }
     }
-    
-    public static String getTweet()  throws IOException{
-        String result="";
+
+    public static String getTweet() throws IOException {
+        String result = "";
         HttpGet httpGet = new HttpGet("http://localhost:9200/gb/tweet/9");
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
         // The underlying HTTP connection is still held by the response object
@@ -78,47 +83,52 @@ public class MyExamples {
             if (entity1 != null) {
                 long len = entity1.getContentLength();
                 if (len != -1 && len < 2048) {
-              //      System.out.println(EntityUtils.toString(entity1));
+                    //      System.out.println(EntityUtils.toString(entity1));
                     result = EntityUtils.toString(entity1);
                 } else {
-                    System.out.println("entity length="+len);
+                    System.out.println("entity length=" + len);
                 }
             }
-            
+
             EntityUtils.consume(entity1);
         } finally {
             response1.close();
         }
         return result;
     }
-    
+
     public static void main(String[] args) throws Exception {
-        String tweetString="";
-        RefEntity refEntity=new RefEntity();
+        System.out.println("myexamples.MyExamples.main()");
+        new SortingExample().run();
+    }
+
+    private static void sometest() throws IOException, ParseException, JsonSyntaxException {
+        String tweetString = "";
+        RefEntity refEntity = new RefEntity();
         String refEntityString = gson.toJson(refEntity);
         httpclient = HttpClients.createDefault();
         try {
-            //getExample();    
-            tweetString=getTweet();
-            StringEntity stringEntity= new StringEntity(refEntityString);            
+            //getExample();
+            tweetString = getTweet();
+            StringEntity stringEntity = new StringEntity(refEntityString);
             HttpPost httppost = new HttpPost("http://localhost:9200/referenzer/reference");
             httppost.setEntity(stringEntity);
             CloseableHttpResponse response1 = httpclient.execute(httppost);
-            System.out.println("responseStatus="+response1.getStatusLine());
-            PostResponseEntity pRE=gson.fromJson(EntityUtils.toString(response1.getEntity()), PostResponseEntity.class);
+            System.out.println("responseStatus=" + response1.getStatusLine());
+            PostResponseEntity pRE = gson.fromJson(EntityUtils.toString(response1.getEntity()), PostResponseEntity.class);
             System.out.println(pRE.toString(1));
             //System.out.println("response="+EntityUtils.toString(response1.getEntity()));
         } finally {
             httpclient.close();
         }
-        
+
         System.out.println(tweetString);
-        
-        Gson gson=new Gson();
-        TweetResponse tweetResponse= gson.fromJson(tweetString, TweetResponse.class);
+
+        Gson gson = new Gson();
+        TweetResponse tweetResponse = gson.fromJson(tweetString, TweetResponse.class);
         System.out.println(tweetResponse.toString(1));
-        
-                    System.out.println(refEntityString);
+
+        System.out.println(refEntityString);
     }
 
 }

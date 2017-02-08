@@ -5,24 +5,29 @@
  */
 package myexamples.lambda;
 
+import java.util.function.Consumer;
+
 /**
  *
  * @author odzhara-ongom
  */
 public class LambdaServices {
+
     //classic java implementation
-    private AcceptDummy serviceNotNull= new AcceptDummyImpl();
+    private AcceptDummy serviceNotNull = new AcceptDummyImpl();
     //implementation with annonymous class
-    private AcceptDummy serviceOdd=new AcceptDummy() {
+    private AcceptDummy serviceOdd = new AcceptDummy() {
         @Override
         public boolean accept(DummyClass d) {
             return d.isOdd();
         }
     };
     //Lambda operation
-    private AcceptDummy serviceEven=(DummyClass d)->{return d.isEven(); };
+    private AcceptDummy serviceEven = (DummyClass d) -> {
+        return d.isEven();
+    };
     //short lambda operation
-    private AcceptDummy serviceTen=DummyClass::isTen;
+    private AcceptDummy serviceTen = DummyClass::isTen;
 
     public AcceptDummy getServiceNotNull() {
         return serviceNotNull;
@@ -40,5 +45,4 @@ public class LambdaServices {
         return serviceTen;
     }
 
-    
 }
